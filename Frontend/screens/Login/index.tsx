@@ -1,8 +1,19 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { StyleSheet, Text, TextInput, View } from 'react-native';
 
 const Login: React.FC = () => {
-  return <Text>Login Screen</Text>;
+  return (
+    <View>
+      <View>
+        <TextInput placeholder="Username" />
+      </View>
+      <View>
+        <TextInput placeholder="Password" />
+      </View>
+    </View>
+  );
 };
+
+const styles = StyleSheet.create({});
 
 export default Login;

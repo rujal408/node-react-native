@@ -19,6 +19,7 @@ class Routes {
 
     private initializeRoutes():void{
         this.app.use(express.json()) // convert the request body into json (parse)
+        this.app.use(express.urlencoded())
         this.app.use('/api', this.userRoutes.router);
         this.app.use('/api', this.mallRoutes.router);
         this.app.use('/api', this.shopRoutes.router);
