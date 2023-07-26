@@ -1,7 +1,8 @@
 import { Request,Response} from 'express';
 import Malls from '../model/Mall';
+import ImageController from './ImageController';
 
-class MallController{
+class MallController extends ImageController{
     protected async getAllMalls(_:Request,res:Response){
         try{
           const malls = await Malls.find({})
@@ -12,10 +13,12 @@ class MallController{
       protected async getSingleMall(req:Request,res:Response){}
 
       protected async createMall(req:Request,res:Response){
-        const mall = new Malls({name:"KL Tower",shops:[]})
+        const {name} = req.body
+
+        
         try {
-          const newMall = await mall.save();
-          res.status(201).json(newMall);
+          const mallResult = await Malls.create({name})
+          res.status(201).json(mallResult);
         } catch (error) {
           res.status(400)
         }

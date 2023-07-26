@@ -16,7 +16,7 @@ class ShopRoutes extends ShopController {
         this.router.use(authMiddleWare)
         this.router.get(`${this.path}`, this.getAllShops);
         this.router.get(`${this.path}/:id`, this.getSingleShop);
-        this.router.post(`${this.path}`, this.createShop);
+        this.router.post(`${this.path}`,this.getMultipleImage, this.createShop);
         this.router.put(`${this.path}/:id`, this.updateShop);
         this.router.delete(`${this.path}/:id`, this.deleteShop);
       }

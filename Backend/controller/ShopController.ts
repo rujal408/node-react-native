@@ -1,7 +1,8 @@
 import { Request,Response} from 'express';
+import ImageController from './ImageController';
 // import Shops from '../model/Shop';
 
-class ShopController{
+class ShopController extends ImageController{
     protected async getAllShops(req:Request,res:Response){}
 
     protected async getSingleShop(req:Request,res:Response){}

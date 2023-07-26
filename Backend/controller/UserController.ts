@@ -2,25 +2,24 @@ import { Request,Response } from 'express';
 import User from '../model/User';
 import * as bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
+import { SECRET_KEY } from '../constants/common';
 
 class UserController {
-    private SECRET_KEY = "NOTESAPI"
     protected async createUser(req:Request,res:Response){
         try{
             const {name,username,email,password} = req.body
+            console.log(req.body)
             
             const existingUser = await User.findOne({email:email})
 
             if(existingUser){
                 return res.status(400).json({message:"User already exists"})
             }
-            
-            // const hashedPassword = await bcrypt.hash(password,10);
-            
+                        
             bcrypt.hash(password, 10, async(_, hash) => {
                 // Store hash in your password DB.
                 const result = await User.create({email:email,username:username,name:name,password:hash})
-                const token = jwt.sign({email:result.email,id:result.id},"NOTESAPI")
+                const token = jwt.sign({email:result.email,id:result.id},SECRET_KEY)
                 return res.status(201).json({user:result,token})
             });
            
@@ -42,7 +41,7 @@ class UserController {
                 if(!matchPassword){
                     return res.status(400).json({message:"Invalid Password"})
                 }
-                const token = jwt.sign({email:existingUser.email,id:existingUser.id},"NOTESAPI")
+                const token = jwt.sign({email:existingUser.email, id:existingUser.id},SECRET_KEY)
                 return res.status(201).json({user:existingUser,token})
             }
             return res.status(404).json({message:"User not found"})

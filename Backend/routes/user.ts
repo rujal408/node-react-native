@@ -15,8 +15,6 @@ class UserRoutes extends UserController {
         this.router.post(`${this.path}`, this.createUser);
         this.router.post(`${this.path}/login`, this.loginUser);
       }
-
-      
 }
 
 export default UserRoutes

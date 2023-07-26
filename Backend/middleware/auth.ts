@@ -1,11 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import jwt, { JwtPayload } from 'jsonwebtoken'
+import { SECRET_KEY } from "../constants/common";
 
 interface AuthRequest extends Request{
     userId?:string
 }
-
-const SECRET_KEY = "NOTESAPI"
 
 const authMiddleWare = async (req:AuthRequest, res:Response, next:NextFunction)=>{
     try{

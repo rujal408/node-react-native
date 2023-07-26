@@ -16,7 +16,7 @@ class MallRoutes extends MallController {
         this.router.use(authMiddleWare)        
         this.router.get(`${this.path}`, this.getAllMalls);
         this.router.get(`${this.path}/:id`, this.getSingleMall);
-        this.router.post(`${this.path}`, this.createMall);
+        this.router.post(`${this.path}`, this.getSingleImage, this.createMall);
         this.router.put(`${this.path}/:id`, this.updateMall);
         this.router.delete(`${this.path}/:id`, this.deleteMall);
       }
