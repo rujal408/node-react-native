@@ -1,5 +1,6 @@
 import express from 'express';
 import mongoose from "mongoose";
+import cloudinary from 'cloudinary'
 import dotenv from 'dotenv';
 import Routes from './routes';
 
@@ -18,6 +19,13 @@ class App {
 
   listen(){
     const port =process.env.PORT;
+
+    cloudinary.v2.config({
+      cloud_name:process.env.CLOUDNARY_NAME,
+      api_key:process.env.CLOUDNARY_API_KEY,
+      api_secret:process.env.CLOUDNARY_API_SECRET,
+    })
+    
     this.app.listen(port, () => {
       console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
     });

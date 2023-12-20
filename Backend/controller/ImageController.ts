@@ -1,12 +1,12 @@
-import uploadFiles from "../utils/uploadFile"
+// import uploadFiles from "../utils/uploadFile"
 
 class ImageController{
    protected async getSingleImage(){
-        return uploadFiles.single('image')
+        // return uploadFiles.single('image')
     }
 
     protected async getMultipleImage(){
-        return uploadFiles.array('image',10)
+        // return uploadFiles.array('image',10)
 
     }
 

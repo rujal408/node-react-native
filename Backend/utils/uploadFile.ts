@@ -1,5 +1,5 @@
-import multer, { Multer } from 'multer'
+import multer from 'multer'
 
-const uploadFiles:Multer = multer({dest:'../files'});
+const storage = multer.memoryStorage()
 
-export default uploadFiles
+export const singleUpload = multer({storage}).single('file')

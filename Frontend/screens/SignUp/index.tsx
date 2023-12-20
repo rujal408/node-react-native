@@ -21,7 +21,6 @@ const SignUp = (props: IProps) => {
   const [info, setInfo] = useState({ name: '', email: '', username: '', password: '' });
 
   const createUser = async () => {
-    // CALL [API]
     try {
       const res = await axios.post(`${env.BASE_URL}/users`, info);
       const { data } = res;

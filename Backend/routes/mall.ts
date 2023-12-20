@@ -13,7 +13,7 @@ class MallRoutes extends MallController {
       }
 
       private initializeRoutes() {
-        this.router.use(authMiddleWare)        
+        // this.router.use(authMiddleWare)        
         this.router.get(`${this.path}`, this.getAllMalls);
         this.router.get(`${this.path}/:id`, this.getSingleMall);
         this.router.post(`${this.path}`, this.getSingleImage, this.createMall);
