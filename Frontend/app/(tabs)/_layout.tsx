@@ -73,6 +73,21 @@ const TabsLayout = () => {
             ),
           }}
         />
+        <Tabs.Screen
+          name="create"
+          options={{
+            title: "Create",
+            headerShown: false,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                name="Create"
+                icon={icons.bookmark}
+                color={color}
+                focused={focused}
+              />
+            ),
+          }}
+        />
       </Tabs>
     </>
   );
