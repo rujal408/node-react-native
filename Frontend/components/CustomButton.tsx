@@ -4,7 +4,7 @@ import React from "react";
 interface IProps {
   title: string;
   containerStyles: string;
-  textStyles: string;
+  textStyles?: string;
   handlePress: (e: GestureResponderEvent) => void;
   isLoading: boolean;
 }
