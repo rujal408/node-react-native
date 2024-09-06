@@ -40,6 +40,7 @@ class App {
           console.log("Connected...");
         })
         .catch((error) => {
+          console.log({error})
           console.log("Error in Database");
         });
     }
