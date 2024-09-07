@@ -1,7 +1,14 @@
 import React from "react";
-import { Stack } from "expo-router";
+import { Redirect, Stack } from "expo-router";
+import { useSession } from "@/providers/SessionProvider";
 
 const AuthLayout = () => {
+  const { isSignedIn } = useSession();
+
+  if (!isSignedIn) {
+    return <Redirect href="/(auth)" />;
+  }
+  
   return (
     <Stack>
       <Stack.Screen

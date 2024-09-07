@@ -5,7 +5,7 @@ import { Link, router } from "expo-router";
 import { baseURL } from "@/utils/axiosConfig";
 import axios from "axios";
 import Input from "@/components/elements/Input";
-import { SubmitHandler, useForm, FieldValues } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ErrorMessage from "@/components/elements/ErrorMessage";

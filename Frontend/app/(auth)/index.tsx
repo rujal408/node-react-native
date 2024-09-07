@@ -2,19 +2,22 @@ import { StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { baseURL } from "@/utils/axiosConfig";
+import * as SecureStore from "expo-secure-store";
+import { useSession } from "@/providers/SessionProvider";
 
 const SignIn = () => {
   const [data, setData] = useState({ username: "", password: "" });
+  const { setIsSignedIn } = useSession();
 
   const handleLogin = async () => {
     try {
       const res = await axios.post(`${baseURL}/users/login`, data);
       console.log(res);
       try {
-        await AsyncStorage.setItem("token", "");
+        await SecureStore.setItemAsync("token", "");
+        setIsSignedIn(true);
       } catch (err) {
         // save error
       }
