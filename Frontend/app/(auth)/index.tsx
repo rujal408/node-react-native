@@ -1,20 +1,38 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
 import axios from "axios";
 import { baseURL } from "@/utils/axiosConfig";
 import * as SecureStore from "expo-secure-store";
 import { useSession } from "@/providers/SessionProvider";
+import Input from "@/components/elements/Input";
+import ErrorMessage from "@/components/elements/ErrorMessage";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+const signInSchema = z.object({
+  username: z.string().min(1, { message: "Required" }),
+  password: z.string().min(1, { message: "Required" }),
+});
+
+type TSignIn = z.infer<typeof signInSchema>;
 
 const SignIn = () => {
-  const [data, setData] = useState({ username: "", password: "" });
   const { setIsSignedIn } = useSession();
 
-  const handleLogin = async () => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TSignIn>({
+    resolver: zodResolver(signInSchema),
+  });
+
+  const handleLogin: SubmitHandler<TSignIn> = async (data) => {
     try {
-      const res = await axios.post(`${baseURL}/users/login`, data);
-      console.log(res);
+      await axios.post(`${baseURL}/users/login`, data);
       try {
         await SecureStore.setItemAsync("token", "");
         setIsSignedIn(true);
@@ -26,27 +44,22 @@ const SignIn = () => {
     }
   };
 
-  const handleChange = (text: string) => {
-    return (name: string) => {
-      setData({ ...data, [name]: text });
-    };
-  };
-
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Log In</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        onChangeText={handleChange("username")}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
+      <Input name="username" control={control} placeholder="Username" />
+      <ErrorMessage errors={errors} name="username" />
+      <Input
+        name="password"
+        control={control}
         secureTextEntry={true}
-        onChangeText={handleChange("password")}
+        placeholder="Password"
       />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
+      <ErrorMessage errors={errors} name="password" />
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleSubmit(handleLogin)}
+      >
         <Text style={styles.buttonText}>Login</Text>
       </TouchableOpacity>
       <Link style={styles.link} href="/(auth)/sign-up">

@@ -62,10 +62,10 @@ const SignUp = () => {
         style={styles.button}
         onPress={handleSubmit(handleRegister)}
       >
-        <Text style={styles.buttonText}>Sign Up</Text>
+        <Text>Sign Up</Text>
       </TouchableOpacity>
       <Link style={styles.link} href="/(auth)">
-        <Text style={styles.buttonText}>Login?</Text>
+        <Text>Login?</Text>
       </Link>
     </SafeAreaView>
   );
@@ -89,7 +89,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
   },
-  buttonText: {},
   link: {
     color: "white",
     marginTop: 5,
