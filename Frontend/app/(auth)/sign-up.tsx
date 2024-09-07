@@ -1,56 +1,68 @@
-import { StyleSheet, Text, TextInput, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
+import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Link } from "expo-router";
-import axiosInstance from "../utils/axiosConfig";
+import { Link, router } from "expo-router";
+import { baseURL } from "@/utils/axiosConfig";
+import axios from "axios";
+import Input from "@/components/elements/Input";
+import { SubmitHandler, useForm, FieldValues } from "react-hook-form";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import ErrorMessage from "@/components/elements/ErrorMessage";
+
+const signUpSchema = z.object({
+  name: z.string().min(1, { message: "Required" }),
+  username: z.string().min(1, { message: "Required" }),
+  password: z.string().min(1, { message: "Required" }),
+  email: z.string().min(1, { message: "Required" }),
+});
+
+type TSignUp = z.infer<typeof signUpSchema>;
 
 const SignUp = () => {
-  const [data, setData] = useState({
-    name: "",
-    username: "",
-    password: "",
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<TSignUp>({
+    resolver: zodResolver(signUpSchema),
   });
 
-  const handleRegister = async () => {
+  const handleRegister: SubmitHandler<TSignUp> = async (data) => {
     try {
-      const res = await axiosInstance.post("/users/register", data);
+      await axios.post(`${baseURL}/users/register`, data);
+      router.replace("/(auth)");
     } catch (err) {
-      // handle error
+      Alert.alert(JSON.stringify(err));
     }
-  };
-
-  const handleChange = (text: string) => {
-    return (name: string) => {
-      setData({ ...data, [name]: text });
-    };
   };
 
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Sign Up</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Full Name"
-        onChangeText={handleChange("name")}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        onChangeText={handleChange("username")}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        onChangeText={handleChange("email")}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        onChangeText={handleChange("password")}
+      <Input name="name" control={control} placeholder="Full Name" />
+      {errors && errors.name && errors.name.message && (
+        <ErrorMessage errors={errors} name="name" />
+      )}
+      <Input name="username" control={control} placeholder="Username" />
+      <ErrorMessage errors={errors} name="username" />
+
+      <Input name="email" control={control} placeholder="Email" />
+      <ErrorMessage errors={errors} name="email" />
+
+      <Input
+        name="password"
+        control={control}
         secureTextEntry={true}
+        placeholder="Password"
       />
-      <TouchableOpacity style={styles.button} onPress={handleRegister}>
-        <Text style={styles.buttonText}>Login</Text>
+      <ErrorMessage errors={errors} name="password" />
+
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleSubmit(handleRegister)}
+      >
+        <Text style={styles.buttonText}>Sign Up</Text>
       </TouchableOpacity>
       <Link style={styles.link} href="/(auth)">
         <Text style={styles.buttonText}>Login?</Text>
@@ -71,16 +83,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     color: "#fff",
     marginBottom: 30,
-  },
-  input: {
-    width: "100%",
-    height: 50,
-    backgroundColor: "white",
-    borderRadius: 8,
-    paddingHorizontal: 15,
-    color: "black",
-    marginBottom: 20,
-    fontSize: 16,
   },
   button: {
     backgroundColor: "white",
