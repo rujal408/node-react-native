@@ -1,4 +1,4 @@
-import { TextInput, StyleSheet } from "react-native";
+import { TextInput, StyleSheet, View, Text } from "react-native";
 import React from "react";
 import { Controller } from "react-hook-form";
 
@@ -7,6 +7,8 @@ interface IProps {
   control: any;
   secureTextEntry?: boolean;
   placeholder: string;
+  label?: string;
+  helperText?: string;
 }
 
 const Input: React.FC<IProps> = ({
@@ -14,21 +16,26 @@ const Input: React.FC<IProps> = ({
   control,
   placeholder,
   secureTextEntry = false,
+  label,
+  helperText,
 }) => (
-  <Controller
-    name={name}
-    control={control}
-    defaultValue=""
-    render={({ field: { onChange, value } }) => (
-      <TextInput
-        style={styles.input}
-        placeholder={placeholder}
-        value={value}
-        onChangeText={onChange}
-        secureTextEntry={secureTextEntry}
-      />
-    )}
-  />
+  <View style={styles.view}>
+    {label && <Text>{label}</Text>}
+    <Controller
+      name={name}
+      control={control}
+      render={({ field: { onChange, value } }) => (
+        <TextInput
+          style={styles.input}
+          placeholder={placeholder}
+          value={value}
+          onChangeText={onChange}
+          secureTextEntry={secureTextEntry}
+        />
+      )}
+    />
+    {helperText && <Text style={styles.text}>{helperText}</Text>}
+  </View>
 );
 
 const styles = StyleSheet.create({
@@ -39,9 +46,15 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 15,
     color: "black",
-    marginBottom: 20,
     fontSize: 16,
   },
+  view: {
+    width: "100%",
+    marginBottom: 20,
+  },
+  text:{
+    color:'red'
+  }
 });
 
 export default Input;

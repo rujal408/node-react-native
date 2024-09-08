@@ -1,4 +1,4 @@
-import { Alert, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link, router } from "expo-router";
@@ -8,13 +8,12 @@ import Input from "@/components/elements/Input";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import ErrorMessage from "@/components/elements/ErrorMessage";
 
 const signUpSchema = z.object({
-  name: z.string().min(1, { message: "Required" }),
-  username: z.string().min(1, { message: "Required" }),
-  password: z.string().min(1, { message: "Required" }),
-  email: z.string().min(1, { message: "Required" }),
+  name: z.string().min(1, { message: "Name required" }),
+  username: z.string().min(1, { message: "Username required" }),
+  password: z.string().min(1, { message: "Password required" }),
+  email: z.string().min(1, { message: "Email Required" }),
 });
 
 type TSignUp = z.infer<typeof signUpSchema>;
@@ -38,45 +37,58 @@ const SignUp = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Sign Up</Text>
-      <Input name="name" control={control} placeholder="Full Name" />
-      {errors && errors.name && errors.name.message && (
-        <ErrorMessage errors={errors} name="name" />
-      )}
-      <Input name="username" control={control} placeholder="Username" />
-      <ErrorMessage errors={errors} name="username" />
+    <SafeAreaView>
+      <View style={styles.container}>
+        <Text style={styles.title}>Sign Up</Text>
+        <Input
+          name="name"
+          control={control}
+          placeholder="Full Name"
+          helperText={errors && errors.name && errors.name.message}
+        />
 
-      <Input name="email" control={control} placeholder="Email" />
-      <ErrorMessage errors={errors} name="email" />
+        <Input
+          name="username"
+          control={control}
+          placeholder="Username"
+          helperText={errors && errors.username && errors.username.message}
+        />
 
-      <Input
-        name="password"
-        control={control}
-        secureTextEntry={true}
-        placeholder="Password"
-      />
-      <ErrorMessage errors={errors} name="password" />
+        <Input
+          name="email"
+          control={control}
+          placeholder="Email"
+          helperText={errors && errors.email && errors.email.message}
+        />
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleSubmit(handleRegister)}
-      >
-        <Text>Sign Up</Text>
-      </TouchableOpacity>
-      <Link style={styles.link} href="/(auth)">
-        <Text>Login?</Text>
-      </Link>
+        <Input
+          name="password"
+          control={control}
+          secureTextEntry={true}
+          placeholder="Password"
+          helperText={errors && errors.password && errors.password.message}
+        />
+
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleSubmit(handleRegister)}
+        >
+          <Text>Sign Up</Text>
+        </TouchableOpacity>
+        <Link style={styles.link} href="/(auth)">
+          <Text>Login?</Text>
+        </Link>
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "center",
     backgroundColor: "#1E1E1E",
     paddingHorizontal: 20,
+    height:'100%'
   },
   title: {
     fontSize: 32,

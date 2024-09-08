@@ -1,13 +1,12 @@
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import axios from "axios";
 import { baseURL } from "@/utils/axiosConfig";
 import * as SecureStore from "expo-secure-store";
 import { useSession } from "@/providers/SessionProvider";
 import Input from "@/components/elements/Input";
-import ErrorMessage from "@/components/elements/ErrorMessage";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -32,9 +31,10 @@ const SignIn = () => {
 
   const handleLogin: SubmitHandler<TSignIn> = async (data) => {
     try {
-      await axios.post(`${baseURL}/users/login`, data);
+      const res = await axios.post(`${baseURL}/users/login`, data);
+      router.replace('/(protected)/dashboard')
       try {
-        await SecureStore.setItemAsync("token", "");
+        await SecureStore.setItemAsync("token", res.data.token);
         setIsSignedIn(true);
       } catch (err) {
         // save error
@@ -45,36 +45,42 @@ const SignIn = () => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>Log In</Text>
-      <Input name="username" control={control} placeholder="Username" />
-      <ErrorMessage errors={errors} name="username" />
-      <Input
-        name="password"
-        control={control}
-        secureTextEntry={true}
-        placeholder="Password"
-      />
-      <ErrorMessage errors={errors} name="password" />
-      <TouchableOpacity
-        style={styles.button}
-        onPress={handleSubmit(handleLogin)}
-      >
-        <Text style={styles.buttonText}>Login</Text>
-      </TouchableOpacity>
-      <Link style={styles.link} href="/(auth)/sign-up">
-        <Text style={styles.buttonText}>Register?</Text>
-      </Link>
+    <SafeAreaView>
+      <View style={styles.container}>
+        <Text style={styles.title}>Log In</Text>
+        <Input
+          name="username"
+          control={control}
+          placeholder="Username"
+          helperText={errors && errors.username && errors.username.message}
+        />
+        <Input
+          name="password"
+          control={control}
+          secureTextEntry={true}
+          placeholder="Password"
+          helperText={errors && errors.password && errors.password.message}
+        />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleSubmit(handleLogin)}
+        >
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+        <Link style={styles.link} href="/(auth)/sign-up">
+          <Text style={styles.buttonText}>Register?</Text>
+        </Link>
+      </View>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: "center",
     backgroundColor: "#1E1E1E",
     paddingHorizontal: 20,
+    height: "100%",
   },
   title: {
     fontSize: 32,
