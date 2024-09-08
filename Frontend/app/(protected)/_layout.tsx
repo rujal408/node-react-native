@@ -1,6 +1,9 @@
 import React from "react";
-import { Redirect, Stack } from "expo-router";
+import { Redirect } from "expo-router";
+import { Drawer } from "expo-router/drawer";
+
 import { useSession } from "@/providers/SessionProvider";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const ProtectedLayout = () => {
   const { isSignedIn } = useSession();
@@ -8,10 +11,26 @@ const ProtectedLayout = () => {
   if (!isSignedIn) {
     return <Redirect href="/(auth)" />;
   }
+
   return (
-    <Stack>
-      <Stack.Screen name="dashboard" options={{ headerShown: false }} />
-    </Stack>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Drawer>
+        <Drawer.Screen
+          name="dashboard"
+          options={{
+            drawerLabel: "Dashboard",
+            headerTitle: "Dashboard",
+          }}
+        />
+        <Drawer.Screen
+          name="malls"
+          options={{
+            drawerLabel: "Malls",
+            headerTitle: "Malls",
+          }}
+        />
+      </Drawer>
+    </GestureHandlerRootView>
   );
 };
 

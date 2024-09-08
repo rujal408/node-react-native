@@ -27,12 +27,16 @@ const SignIn = () => {
     formState: { errors },
   } = useForm<TSignIn>({
     resolver: zodResolver(signInSchema),
+    defaultValues: {
+      username: "Rujal",
+      password: "rujal",
+    },
   });
 
   const handleLogin: SubmitHandler<TSignIn> = async (data) => {
     try {
       const res = await axios.post(`${baseURL}/users/login`, data);
-      router.replace('/(protected)/dashboard')
+      router.replace("/(protected)/dashboard");
       try {
         await SecureStore.setItemAsync("token", res.data.token);
         setIsSignedIn(true);
