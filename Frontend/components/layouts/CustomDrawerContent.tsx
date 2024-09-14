@@ -29,7 +29,7 @@ const CustomDrawerContent = (props: any) => {
           paddingBottom: bottom,
           paddingLeft: 20,
           borderTopWidth: 1,
-          borderColor: "red",
+          borderColor: "grey",
         }}
       >
         <TouchableOpacity onPress={handleLogout}>
